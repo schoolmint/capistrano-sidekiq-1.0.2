@@ -240,8 +240,9 @@ namespace :sidekiq do
     Array(fetch(:sidekiq_queue)).each do |queue|
       args.push "--queue #{queue}"
     end
-    config = sidekiq_config(role.properties)
+    config = sidekiq_config(role)
     puts "------- SIDEKIQ CONFIG #{config} #{role} -------"
+    puts role.properties
     args.push "--config #{config}" if config
     args.push "--concurrency #{fetch(:sidekiq_concurrency)}" if fetch(:sidekiq_concurrency)
     if (process_options = fetch(:sidekiq_options_per_process))
