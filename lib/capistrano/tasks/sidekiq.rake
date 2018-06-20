@@ -279,6 +279,7 @@ namespace :sidekiq do
   end
 
   def sidekiq_config(role)
+    puts role
     role_config = "#{role}_config".to_sym
     if fetch(role_config)
       fetch(role_config)
