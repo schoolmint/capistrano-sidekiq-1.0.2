@@ -242,7 +242,7 @@ namespace :sidekiq do
     end
     config = sidekiq_config(role)
     puts "------- SIDEKIQ CONFIG #{config} #{role} -------"
-    puts role.properties
+    puts role.properties.to_h
     args.push "--config #{config}" if config
     args.push "--concurrency #{fetch(:sidekiq_concurrency)}" if fetch(:sidekiq_concurrency)
     if (process_options = fetch(:sidekiq_options_per_process))
