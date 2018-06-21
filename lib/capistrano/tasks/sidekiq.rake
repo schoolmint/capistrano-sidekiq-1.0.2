@@ -240,7 +240,8 @@ namespace :sidekiq do
     Array(fetch(:sidekiq_queue)).each do |queue|
       args.push "--queue #{queue}"
     end
-    args.push "--config #{fetch(:sidekiq_config)}" if fetch(:sidekiq_config)
+    config_file = sidekiq_config(role)
+    args.push "--config #{config_file}" if config_file
     args.push "--concurrency #{fetch(:sidekiq_concurrency)}" if fetch(:sidekiq_concurrency)
     if (process_options = fetch(:sidekiq_options_per_process))
       args.push process_options[idx]
@@ -275,5 +276,11 @@ namespace :sidekiq do
       fetch(:sidekiq_user) ||
       properties.fetch(:run_as) || # global property across multiple capistrano gems
       role.user
+  end
+
+  def sidekiq_config(role)
+    sidekiq_roles = fetch(:sidekiq_roles) || []
+    role_name = role.roles_array.find { |role_name| sidekiq_roles.include?(role_name) }
+    fetch(:"#{role_name}_config") || fetch(:sidekiq_config)
   end
 end
