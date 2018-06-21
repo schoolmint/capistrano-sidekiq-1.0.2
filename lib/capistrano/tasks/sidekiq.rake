@@ -279,7 +279,7 @@ namespace :sidekiq do
   end
 
   def sidekiq_config(role)
-    sidekiq_roles = fetch(:sidekiq_roles) || []
+    sidekiq_roles = Array.wrap(fetch(:sidekiq_roles)) || []
     role_name = role.roles_array.find { |role_name| sidekiq_roles.include?(role_name) }
     fetch(:"#{role_name}_config") || fetch(:sidekiq_config)
   end
