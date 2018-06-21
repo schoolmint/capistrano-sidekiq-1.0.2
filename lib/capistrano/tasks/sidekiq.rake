@@ -87,7 +87,7 @@ namespace :sidekiq do
         else
           each_process_with_index do |pid_file, idx|
             unless pid_file_exists?(pid_file) && process_exists?(pid_file)
-              start_sidekiq(pid_file, idx)
+              start_sidekiq(role, pid_file, idx)
             end
           end
         end
@@ -109,7 +109,7 @@ namespace :sidekiq do
           if pid_file_exists?(pid_file) && process_exists?(pid_file)
             stop_sidekiq(pid_file)
           end
-          start_sidekiq(pid_file, idx)
+          start_sidekiq(role, pid_file, idx)
         end
       end
     end
@@ -136,7 +136,7 @@ namespace :sidekiq do
     on roles fetch(:sidekiq_roles) do |role|
       switch_user(role) do
         each_process_with_index do |pid_file, idx|
-          start_sidekiq(pid_file, idx) unless pid_file_exists?(pid_file)
+          start_sidekiq(role, pid_file, idx) unless pid_file_exists?(pid_file)
         end
       end
     end
@@ -229,7 +229,7 @@ namespace :sidekiq do
     execute :sidekiqctl, 'stop', pid_file.to_s, fetch(:sidekiq_timeout)
   end
 
-  def start_sidekiq(pid_file, idx = 0)
+  def start_sidekiq(role, pid_file, idx = 0)
     args = []
     args.push "--index #{idx}"
     args.push "--pidfile #{pid_file}"
