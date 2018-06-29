@@ -1,3 +1,3 @@
 module Capistrano
-  SidekiqVERSION = '1.0.4'
+  SidekiqVERSION = '1.0.3'
 end
